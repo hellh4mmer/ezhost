@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 configDotenv();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Security middleware
 // app.use(helmet());
@@ -36,7 +36,7 @@ app.use(
   })
 );
 
-app.use('/api', httpRoutes);
+app.use('/api/v1', httpRoutes);
 
 // 404 handler
 app.use((req, res) => {
