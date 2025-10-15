@@ -1,24 +1,29 @@
 {
-  "name": "ezhost",
-  "module": "server.js",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "start": "bun run server.js",
-    "client": "cd client && bun run dev",
-    "server": "nodemon --watch \"bun run server.js\"",
-    "dev": "concurrently \"bun run server\" \"bun run client\""
-  },
-  "dependencies": {
-    "compression": "^1.8.1",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "multer": "^2.0.2"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "concurrently": "^9.2.1",
-    "nodemon": "^3.1.10"
-  }
+	"name": "ezhost",
+	"module": "server.js",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"install-client": "cd client && bun install",
+		"install-server": "bun install",
+		"client": "cd client && bun run dev",
+		"dev-server": "bun --watch run server.js",
+		"dev": "conc \"bun run server\" \"bun run client\"",
+		"build-client": "cd client && bun run build",
+		"start": "NODE_ENV=production bun server.js"
+	},
+	"dependencies": {
+		"compression": "^1.8.1",
+		"cors": "^2.8.5",
+		"deadslog": "^1.2.2",
+		"dotenv": "^17.2.3",
+		"express": "^5.1.0",
+		"express-rate-limit": "^8.1.0",
+		"multer": "^2.0.2"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"concurrently": "^9.2.1",
+		"nodemon": "^3.1.10"
+	}
 }
