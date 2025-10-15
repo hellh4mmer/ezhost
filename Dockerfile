@@ -1,25 +1,25 @@
 # Stage 1: Build Stage (client build)
-# FROM oven/bun:1.2.13-alpine AS builder
+FROM oven/bun:1.3-alpine AS builder
 
-# WORKDIR /app
+WORKDIR /app
 
 # Install root dependencies (Express etc.)
-# COPY package*.json ./
-# RUN bun install
+COPY package*.json ./
+RUN bun install
 
 # Copy client separately and install client dependencies + build
-# COPY client ./client
-# WORKDIR /app/client
-# RUN bun install && bun run build
+COPY client ./client
+WORKDIR /app/client
+RUN bun install && bun run build
 
-# Move built files to /app/public in the builder stage
-# RUN mkdir -p /app/public && mv ../public/* /app/public/
+# Move built files to /app/dist in the builder stage
+RUN mkdir -p /app/dist && mv ../dist/* /app/dist/
 
 # Return to root app dir
-# WORKDIR /app
+WORKDIR /app
 
 # Stage 2: Production Stage
-FROM oven/bun:1.2.13-alpine
+FROM oven/bun:1.3-alpine
 
 # Install for alpine
 RUN apk update --no-cache && \
@@ -38,8 +38,8 @@ RUN bun install --production
 # Copy backend source code (everything except what's ignored)
 COPY . .
 
-# Copy built public files from builder
-# COPY --from=builder /app/public /app/public
+# Copy built dist files from builder
+COPY --from=builder /app/dist /app/dist
 
 # Copy purge script
 # COPY /utils/purge.sh /etc/periodic/daily/purge.sh
@@ -51,8 +51,8 @@ COPY . .
 EXPOSE 5000
 
 # Add a health check to ensure the container is running properly
-# HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-#   CMD curl -f http://localhost:5000/api/v1/healthcheck || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:5000/api/v1/healthcheck || exit 1
 
 # Start your app
 CMD ["bun", "start"]
