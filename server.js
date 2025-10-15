@@ -18,7 +18,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/static', express.static(path.join(__dirname, 'public')));
+// Cache static files for 7 days (increased from 1 day for better performance)
+app.use(
+  '/static',
+  express.static(path.join(__dirname, 'public'), {
+    setHeaders: (res, path) => {
+      res.setHeader('Cache-Control', 'public, max-age=604800'); // 7 days
+    },
+  })
+);
 app.use('/api', httpRoutes);
 app.use((req, res) => {
   res.status(404).json({ message: 'Not Found' });
