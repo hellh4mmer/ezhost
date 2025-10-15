@@ -181,7 +181,7 @@ function App() {
 						<div className="flex justify-center gap-4 mt-4">
 							{!selectedFile.isDirectory && (
 								<a
-									href={`${window.location.origin}/${selectedFile.url}`}
+									href={new URL(selectedFile.url, window.location.origin).href}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="px-4 py-2 bg-purple-600 rounded-md text-white text-sm hover:bg-purple-500 transition"
