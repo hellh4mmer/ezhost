@@ -3,6 +3,8 @@ import cors from 'cors';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { configDotenv } from 'dotenv';
+import compression from 'compression';
+// import helmet from 'helmet';
 
 import httpRoutes from './routes/httpRoutes.js';
 
@@ -13,6 +15,12 @@ configDotenv();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Security middleware
+// app.use(helmet());
+
+// Compression middleware for better performance
+app.use(compression());
 
 app.use(cors());
 app.use(express.json());
@@ -27,10 +35,15 @@ app.use(
     },
   })
 );
+
 app.use('/api', httpRoutes);
+
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: 'Not Found' });
 });
+
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Internal Server Error' });
