@@ -1,15 +1,17 @@
-import { Router } from 'express';
-import uploadSystem from '../middlewares/multer.js';
+import { Router } from "express";
 import {
-  helloWorld,
-  listFiles,
-  uploadFile,
-} from '../controllers/httpController.js';
+	healthCheck,
+	listFiles,
+	uploadFile,
+} from "../controllers/httpController.js";
+import uploadSystem from "../middlewares/multer.js";
+import localOnly from "../middlewares/localOnly.js";
+import limiter from "../middlewares/limiter.js";
 
 const router = Router();
 
-router.get('/hello', helloWorld);
-router.get('/files', listFiles);
-router.post('/upload', uploadSystem, uploadFile);
+router.get("/healthcheck", localOnly, healthCheck);
+router.get("/files", limiter, listFiles);
+router.post("/upload", limiter, uploadSystem, uploadFile);
 
 export default router;
